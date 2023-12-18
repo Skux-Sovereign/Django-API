@@ -8,12 +8,18 @@ class SampleSerializer(serializers.ModelSerializer):
 
 
 class ExperimentListSerializer(serializers.ModelSerializer):
+    samples = serializers.SerializerMethodField()
+
+    def get_samples(self, obj):
+        return [sample.accession for sample in obj.samples.all()]
+    
     class Meta:
         model = Experiment
         fields = (
             "id",
             "accession",
             "metadata",
+            "samples"
         )
 
 class ExperimentDetailSerializer(serializers.ModelSerializer):
@@ -24,7 +30,7 @@ class ExperimentDetailSerializer(serializers.ModelSerializer):
         fields = (
             "accession",
             "metadata",
-            "samples",
+            "samples"
         )
 
 class ExperimentSerializer(serializers.ModelSerializer):
